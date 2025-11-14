@@ -66,15 +66,24 @@ void loop() {
   if (now - last_status_time >= 1000) {  // 1秒経過
     int sensorValue_A0 = 0;
     int sensorValue_A1 = 0;
-    for(int i=0; i<8; i++){
+    int average_count = 16;
+    float calibration_factor_a0 = 0.930242511; // 校正係数
+    float calibration_term_a0 = 13.545; // 校正項
+    float calibration_factor_a1 = 0.932370603; // 校正係数
+    float calibration_term_a1 = 14.636; // 校正項
+
+    for(int i=0; i<average_count; i++){
       sensorValue_A0 += analogRead(A0); // read the input on analog pin 0
       sensorValue_A1 += analogRead(A1); // read the input on analog pin 1
     }
-    sensorValue_A0 /= 8;
-    sensorValue_A1 /= 8;
+    sensorValue_A0 /= average_count;
+    sensorValue_A1 /= average_count;
 
-    float voltage_A0 = sensorValue_A0 * (5.0 / (pow(2, adc_resolution) - 1)); // Convert to voltage
-    float voltage_A1 = sensorValue_A1 * (5.0 / (pow(2, adc_resolution) - 1)); // Convert to voltage
+    float calibrated_sensorValue_A0 = sensorValue_A0 * calibration_factor_a0 + calibration_term_a0;
+    float calibrated_sensorValue_A1 = sensorValue_A1 * calibration_factor_a1 + calibration_term_a1;
+
+    float voltage_A0 = calibrated_sensorValue_A0 * (5.0 / (pow(2, adc_resolution) - 1)); // Convert to voltage
+    float voltage_A1 = calibrated_sensorValue_A1 * (5.0 / (pow(2, adc_resolution) - 1)); // Convert to voltage
     
     float calculate_voltage_A0 = voltage_A0 * ((47000.0 + 20000.0) / 20000.0); // Voltage divider calculation
     float calculate_voltage_A1 = voltage_A1 * ((47000.0 + 20000.0) / 20000.0); // Voltage divider calculation

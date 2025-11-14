@@ -24,8 +24,6 @@ String buffer = "";
 
 // 状態変数（例として初期値をセット）
 bool  led_state = false;
-float voltage   = 12.34;
-float current   = 1.23;
 
 unsigned long last_status_time = 0;  // 1秒タイマー用
 

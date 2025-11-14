@@ -64,8 +64,14 @@ void loop() {
   // ----------------------------------------------------
   unsigned long now = millis();
   if (now - last_status_time >= 1000) {  // 1秒経過
-    int sensorValue_A0 = analogRead(A0); // read the input on analog pin 0
-    int sensorValue_A1 = analogRead(A1); // read the input on analog pin 1
+    int sensorValue_A0 = 0;
+    int sensorValue_A1 = 0;
+    for(int i=0; i<8; i++){
+      sensorValue_A0 += analogRead(A0); // read the input on analog pin 0
+      sensorValue_A1 += analogRead(A1); // read the input on analog pin 1
+    }
+    sensorValue_A0 /= 8;
+    sensorValue_A1 /= 8;
 
     float voltage_A0 = sensorValue_A0 * (5.0 / (pow(2, adc_resolution) - 1)); // Convert to voltage
     float voltage_A1 = sensorValue_A1 * (5.0 / (pow(2, adc_resolution) - 1)); // Convert to voltage
@@ -79,6 +85,8 @@ void loop() {
     doc["led_state"] = led_state;
     doc["voltage1"]   = calculate_voltage_A0;
     doc["voltage2"]   = calculate_voltage_A1;
+    doc["raw_a0"]    = sensorValue_A0;
+    doc["raw_a1"]    = sensorValue_A1;
 
     serializeJson(doc, Serial);
     Serial.println(); // 行区切り

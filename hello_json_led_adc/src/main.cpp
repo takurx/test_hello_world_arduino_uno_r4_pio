@@ -82,6 +82,9 @@ void loop() {
     float calibrated_sensorValue_A0 = sensorValue_A0 * calibration_factor_a0 + calibration_term_a0;
     float calibrated_sensorValue_A1 = sensorValue_A1 * calibration_factor_a1 + calibration_term_a1;
 
+    // float calibrated_sensorValue_A0 = sensorValue_A0 * calibration_factor_a0;
+    // float calibrated_sensorValue_A1 = sensorValue_A1 * calibration_factor_a1;
+
     float voltage_A0 = calibrated_sensorValue_A0 * (5.0 / (pow(2, adc_resolution) - 1)); // Convert to voltage
     float voltage_A1 = calibrated_sensorValue_A1 * (5.0 / (pow(2, adc_resolution) - 1)); // Convert to voltage
     
@@ -94,8 +97,8 @@ void loop() {
     doc["led_state"] = led_state;
     doc["voltage1"]   = calculate_voltage_A0;
     doc["voltage2"]   = calculate_voltage_A1;
-    doc["raw_a0"]    = sensorValue_A0;
-    doc["raw_a1"]    = sensorValue_A1;
+    // doc["raw_a0"]    = sensorValue_A0;
+    // doc["raw_a1"]    = sensorValue_A1;
 
     serializeJson(doc, Serial);
     Serial.println(); // 行区切り

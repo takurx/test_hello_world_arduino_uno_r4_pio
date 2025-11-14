@@ -1,3 +1,12 @@
+/*
+  Hello ADC
+
+  This example reads the analog input on pins A0 and A1, converts the readings to voltage,
+  and prints the results to the Serial Monitor. It also calculates the actual voltage
+  considering a voltage divider with resistors of 47k ohms and 20k ohms.
+
+  The ADC resolution can be set to 10, 12, or 14 bits by uncommenting the corresponding line.
+*/
 #include <Arduino.h>
 
 // int adc_resolution = 10; // Default ADC resolution

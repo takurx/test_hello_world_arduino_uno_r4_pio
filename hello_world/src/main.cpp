@@ -1,3 +1,9 @@
+/*
+  Hello World
+
+  This example prints "Hello, World!" to the Serial Monitor every second.
+  It also demonstrates a simple function that adds two integers and returns the result.
+ */
 #include <Arduino.h>
 
 // put function declarations here:

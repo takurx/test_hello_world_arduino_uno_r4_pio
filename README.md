@@ -10,3 +10,5 @@ This program reads the analog value from an analog pin and prints the value to t
 ## 3. hello_json_led
 This program demonstrates how to parse JSON data to control an LED on the Arduino Uno R4. It uses the ArduinoJson library to read JSON commands and turn the LED on or off based on the received data.
 
+## 4. hello_json_led_adc
+This program combines the functionality of reading analog values and controlling an LED using JSON data. It reads the analog value from a specified pin and sends the value in JSON format to the Serial Monitor. It also listens for JSON commands to control the LED state.

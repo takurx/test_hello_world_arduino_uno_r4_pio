@@ -12,9 +12,15 @@ void setup(){
 }
 
 void loop(){
-  int target_percentage = 100;    //出力目標値(%)
-  int value = (4095 * target_percentage) / 100; //12bit分, 4095 = 2^12 -1
   // int value;
+  
+  // int target_percentage = 100;    //出力目標値(%)
+  // int value = (4095 * target_percentage) / 100; //12bit分, 4095 = 2^12 -1
+
+  float target_voltage = 2.500;    //出力目標値(V)
+  float max_voltage = 4.600;       //最大出力電圧(V)
+  float float_value = target_voltage / (max_voltage / 4095); //12bit分, 4095 = 2^12 -1
+  int value = (int)(float_value + 0.5); //四捨五入して整数に変換
   
   analogWrite(A0, value);           //DACの4095の値をA0に出力
   delayMicroseconds(30);          //変換時間待機

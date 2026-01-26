@@ -7,8 +7,16 @@
 // MCP4725の12ビット最大値
 #define MCP4725_MAX_VALUE 4095
 
-// 2.5Vを出力するためのDAC値 (VDD=5Vの場合、中間値の2048)
-#define OUTPUT_2_5V 2048
+// targetのDAC値 (VDD=5Vの場合、中間値の2048)
+//#define TARGET_VALUE 2048 //
+
+// targetの電圧値
+#define TARGET_VOLTAGE 2.5
+
+// VDDの理想的な値
+#define VDD_IDEAL_VOLTAGE 5.00
+// VDDの実際の値
+#define VDD_MEASURED_VOLTAGE 4.64
 
 /**
  * MCP4725にDAC値を書き込む関数
@@ -74,13 +82,24 @@ void setup() {
     return;
   }
   
-  // 2.5Vを出力
-  Serial.println("\nSetting output to 2.5V...");
+  Serial.print("\nSetting output to ");
+  Serial.print(TARGET_VOLTAGE);
+  Serial.println(" V...");
   
-  if (setMCP4725Voltage(2.5, 5.0)) {
-    Serial.println("Success! Output voltage: 2.5V");
+  float target_voltage = TARGET_VOLTAGE;
+  float ideal_voltage = VDD_IDEAL_VOLTAGE;
+  float measured_voltage = VDD_MEASURED_VOLTAGE;
+  float ideal_resolution_voltage = ideal_voltage / MCP4725_MAX_VALUE;
+  float actual_resolution_voltage = measured_voltage / MCP4725_MAX_VALUE;
+  int dac_value = (int)(target_voltage/measured_voltage * MCP4725_MAX_VALUE);
+
+  if (setMCP4725Voltage(target_voltage, measured_voltage)) {
+    Serial.print("Success! Output voltage: ");
+    float actual_voltage = actual_resolution_voltage * dac_value ;
+    Serial.print(actual_voltage);
+    Serial.println(" V (based on measured VDD)");
     Serial.print("DAC Value: ");
-    Serial.print(OUTPUT_2_5V);
+    Serial.print(dac_value);
     Serial.print(" / ");
     Serial.println(MCP4725_MAX_VALUE);
   } else {
@@ -88,10 +107,21 @@ void setup() {
   }
   
   Serial.println("\n--- Setup Complete ---");
+  Serial.print("Expected Voltage: ");
+  Serial.print(target_voltage);
+  Serial.print(" V, Ideal Voltage  (based on VDD=: ");
+  Serial.print(ideal_voltage);
+  Serial.print("V): ");
+  Serial.print(ideal_resolution_voltage * dac_value);
+  Serial.print(" V, Actual Voltage (based on VDD=");
+  Serial.print(measured_voltage);
+  Serial.print("V): ");
+  Serial.print(actual_resolution_voltage * dac_value);
+  Serial.println("V");
 }
 
 void loop() {
-  // 初期設定で2.5Vが出力されているため、特に処理なし
+  // 初期設定で1.25Vが出力されているため、特に処理なし
   // MCP4725はパワーダウンモードに入るまで出力を保持します
   
   delay(1000);
